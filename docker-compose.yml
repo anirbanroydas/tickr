@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+
+  tickr:
+    build: .
+    image: ${DOCKER_REPO}:${DOCKER_IMAGE_DEV_TAG:-latest-dev}
+    ports:
+      - "7001:7001"
+    environment:
+      ENV: DEV
+    # volumes:
+    #   - ./tickr:/project/tickr
+    depends_on:
+      - rabbitmq
+
+
+  rabbitmq:
+    build: rabbitmq
+    image: aroyd/rabbitmq:3.6-alpine
+    hostname: ${RABBITMQ_HOSTNAME}
+    ports:
+      - "15672:15672"
+    environment:
+      RABBITMQ_ERLANG_COOKIE: ${RABBITMQ_ERLANG_COOKIE}
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS}
+      RABBITMQ_DEFAULT_VHOST: ${RABBITMQ_DEFAULT_VHOST}
